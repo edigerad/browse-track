@@ -32,8 +32,28 @@ calc = (url)->
 
 updateBadge = (url)->
   res = calc url
-  chrome.browserAction.setBadgeText({text: "#{res / 1000}"})
 
+  hh = res // (60*60*60000)
+  mm = res // (60000)
+  ss = parseInt(((res % 60000) / 1000)%60)
+  HH = 
+  if hh <= 9
+    '0'+hh
+  else
+    hh
+
+  MM = 
+  if mm <= 9
+    '0'+mm
+  else
+    mm
+
+  SS = 
+  if ss <= 9
+    '0'+ss
+  else
+    ss
+  chrome.browserAction.setBadgeText({text: "#{HH}:#{MM}:#{SS}"})
 
 chrome.tabs.onActivated.addListener (activeInfo)->
   console.log "Select #{activeInfo.tabId} "
@@ -52,5 +72,5 @@ chrome.alarms.onAlarm.addListener (alarm)->
       if tab.url
         updateBadge tab.url
 
-chrome.alarms.create("update", {periodInMinutes: 0.1})
+chrome.alarms.create("update", {periodInMinutes: 0.001})
 console.log('\'Allo \'Allo! Event Page for Browser Action')
