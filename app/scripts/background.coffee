@@ -3,7 +3,7 @@
 chrome.runtime.onInstalled.addListener (details) ->
   console.log('previousVersion', details.previousVersion)
 
-chrome.browserAction.setBadgeText({text: '+15'})
+chrome.browserAction.setBadgeText({text: 'HELLO!'})
 
 Stat =
   data: {}
@@ -13,15 +13,35 @@ tabChanged = (url) ->
   if Stat.cur
     lst = Stat.data[Stat.cur]
     lst.push(new Date())
+  
+  [d, other] = url.split '://'
+  [domain, oth] = other.split '/'
+  url = d + "://" + domain
+
   Stat.cur = url
   lst = Stat.data[url] or []
   lst.push(new Date())
   Stat.data[url] = lst
 
 calc = (url)->
+  [d, other] = url.split '://'
+  [domain, oth] = other.split '/'
+  url = d + "://" + domain
   lst = Stat.data[url]
+
   if not lst
     return 0
+
+
+
+
+
+  [d, other] = url.split '://'
+  if d not in ['http', 'https']
+    return 0
+
+
+
   n = Math.floor (lst.length / 2)
   res = 0
   for i in [0..n]
